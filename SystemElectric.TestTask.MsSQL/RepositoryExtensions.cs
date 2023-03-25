@@ -18,7 +18,7 @@ namespace SystemElectric.TestTask.MsSQL
         public static void AddMsSqlRepository(this IServiceCollection services)
         {
             var optionsBuilder = new DbContextOptionsBuilder<MainContext>();
-            optionsBuilder.UseSqlServer("Data Source=ERGOSM;Initial Catalog=test;User ID=OMR;Password=Ew21Fyon;TrustServerCertificate=True");
+            optionsBuilder.UseSqlServer("Data Source=ERGOSM;Initial Catalog=test;User ID=;Password=;TrustServerCertificate=True");
             services.AddTransient(context => new MainContext(optionsBuilder.Options));
             services.AddSingleton<IGenericRepository<CarEntry>, GenericRepository<CarEntry>>();
             services.AddSingleton<IGenericRepository<DriverEntry>, GenericRepository<DriverEntry>>();
