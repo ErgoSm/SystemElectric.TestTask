@@ -39,7 +39,7 @@ namespace SystemElectric.TestTask
                     services.AddSingleton<App>();
                     services.AddSingleton<MainWindow>();
                     services.AddSingleton<AdditionalWindow>();
-                    services.AddMsSqlRepository();
+                    services.AddMsSqlRepository("Data Source=;Initial Catalog=test;User ID=;Password=;TrustServerCertificate=True");
                     services.AddSignalR();
                 })
                 .Configure(app =>
