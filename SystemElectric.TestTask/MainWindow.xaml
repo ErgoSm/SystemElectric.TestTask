@@ -1,0 +1,25 @@
+﻿<Window x:Class="SystemElectric.TestTask.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SystemElectric.TestTask"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800" Closing="Window_Closing">
+    <StackPanel>
+        <ListView Name="lstTable" Height="400">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Timestamp}" Width="150">Timestamp</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Car}" Width="200">Car</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Driver}" Width="200">Driver</GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
+            <Button Width="80" Name="btnRun1" Click="btnRun1_Click">Read 1</Button>
+            <Button Width="80" Name="btnRun2" Click="btnRun2_Click">Read 2</Button>
+            <Button Width="80" Name="btnWin2" Click="btnWin2_Click">Open Win2</Button>
+        </StackPanel>
+    </StackPanel>
+</Window>
