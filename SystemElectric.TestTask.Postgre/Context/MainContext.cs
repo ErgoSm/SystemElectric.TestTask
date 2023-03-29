@@ -1,17 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SystemElectric.TestTask.Domain.Entities;
 
-namespace SystemElectric.TestTask.MsSQL.Context
+namespace SystemElectric.TestTask.Postgre.Context
 {
     public class MainContext : DbContext
     {
-        private Dictionary<string, string> _typesMapping;
-        private Action? _configure;
-
-        public MainContext(DbContextOptions<MainContext> options, Dictionary<string, string> typesMapping, Action? configure = null) : base(options)
+        public MainContext(DbContextOptions<MainContext> options) : base(options)
         {
-            _typesMapping = typesMapping;
-            _configure = configure;
             Database.EnsureCreated();
         }
 
@@ -20,8 +15,6 @@ namespace SystemElectric.TestTask.MsSQL.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            _configure?.Invoke();
-
             modelBuilder.Entity<CarEntry>()
                 .ToTable("cars")
                 .HasKey(x => x.Timestamp);
@@ -29,12 +22,12 @@ namespace SystemElectric.TestTask.MsSQL.Context
             modelBuilder.Entity<CarEntry>()
                 .Property(x => x.Timestamp)
                 .HasColumnName("timestamp")
-                .HasColumnType(_typesMapping[nameof(DateTime)]);
+                .HasColumnType("datetime");
 
             modelBuilder.Entity<CarEntry>()
                 .Property(x => x.Name)
                 .HasColumnName("name")
-                .HasColumnType(_typesMapping[nameof(String)]);
+                .HasColumnType("nvarchar(50)");
 
             modelBuilder.Entity<DriverEntry>()
                 .ToTable("drivers")
@@ -43,12 +36,12 @@ namespace SystemElectric.TestTask.MsSQL.Context
             modelBuilder.Entity<DriverEntry>()
                 .Property(x => x.Timestamp)
                 .HasColumnName("timestamp")
-                .HasColumnType(_typesMapping[nameof(DateTime)]);
+                .HasColumnType("datetime");
 
             modelBuilder.Entity<DriverEntry>()
                 .Property(x => x.Name)
                 .HasColumnName("name")
-                .HasColumnType(_typesMapping[nameof(String)]);
+                .HasColumnType("nvarchar(50)");
         }
     }
 }
