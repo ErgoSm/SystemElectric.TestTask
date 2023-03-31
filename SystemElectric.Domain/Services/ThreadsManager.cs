@@ -7,6 +7,7 @@ namespace SystemElectric.TestTask.Domain.Services
     public sealed class ThreadsManager
     {
         public event EventHandler<ReadArgs>? OnSimultaneousRead;
+        public event EventHandler<EventArgs>? OnTimerTick;
 
         private readonly ManualResetEvent firstResetEvent = new ManualResetEvent(false);
         private readonly ManualResetEvent secondResetEvent = new ManualResetEvent(false);
@@ -60,6 +61,8 @@ namespace SystemElectric.TestTask.Domain.Services
 
         private void Handle(object? state)
         {
+            OnTimerTick?.Invoke(this, new EventArgs());
+
             counter++;
 
             _timeProvider.Update();
@@ -81,20 +84,42 @@ namespace SystemElectric.TestTask.Domain.Services
             }
         }
 
-        public void Toggle(int number)
+        public void Toggle(int number, Action activation, Action deactivation)
         {
             string status;
 
             if (number == 1)
             {
                 firstThread.Toggle();
-                status = firstThread.IsEnabled ? "enabled" : "disabled";
+
+                if (firstThread.IsEnabled)
+                {
+                    activation();
+                    status = "enabled";
+                }
+                else
+                {
+                    deactivation();
+                    status = "enabled";
+                }
+
                 _logger.LogInformation($"Thread 1 is {status}");
             }
             else if(number == 2)
             {
                 secondThread.Toggle();
-                status = firstThread.IsEnabled ? "enabled" : "disabled";
+
+                if (secondThread.IsEnabled)
+                {
+                    activation();
+                    status = "enabled";
+                }
+                else
+                {
+                    deactivation();
+                    status = "enabled";
+                }
+
                 _logger.LogInformation($"Thread 2 is {status}");
             }
         }

@@ -31,7 +31,8 @@ namespace SystemElectric.TestTask
                         });
                     });
                     services.AddSingleton<TimeProvider, DefaultTimeProvider>();
-                    services.AddSingleton<StorageInteractor>();
+                    services.AddSingleton<StorageCommandManager>();
+                    services.AddSingleton<StorageQueryManager>();
                     services.AddSingleton<DataProvider>();
                     services.AddSingleton<DataReader>();
                     services.AddSingleton<ThreadsManager>();
@@ -39,7 +40,7 @@ namespace SystemElectric.TestTask
                     services.AddSingleton<App>();
                     services.AddSingleton<MainWindow>();
                     services.AddSingleton<AdditionalWindow>();
-                    //services.AddMsSqlRepository("Data Source=;Initial Catalog=;User ID=;Password=;TrustServerCertificate=True");
+                    //services.AddMsSqlRepository("Data Source=ERGOSM;Initial Catalog=test;User ID=OMR;Password=Ew21Fyon;TrustServerCertificate=True");
                     services.AddNpgSqlRepository("Host=localhost;Port=5432;Database=test3;Username=postgres;Password=pwd");
                     services.AddSignalR();
                 })

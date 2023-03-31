@@ -18,8 +18,8 @@ namespace SystemElectric.TestTask.MsSQL
                 { "DateTime", "datetime" },
                 { "String", "nvarchar(50)" }
             }));
-            services.AddSingleton<IGenericRepository<CarEntry>, GenericRepository<CarEntry>>();
-            services.AddSingleton<IGenericRepository<DriverEntry>, GenericRepository<DriverEntry>>();
+            services.AddTransient<IGenericRepository<CarEntry>, GenericRepository<CarEntry>>();
+            services.AddTransient<IGenericRepository<DriverEntry>, GenericRepository<DriverEntry>>();
         }
 
         public static void AddNpgSqlRepository(this IServiceCollection services, string connectionString)
@@ -32,8 +32,8 @@ namespace SystemElectric.TestTask.MsSQL
                 { "String", "text" }
             },
             () => AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true)));
-            services.AddSingleton<IGenericRepository<CarEntry>, GenericRepository<CarEntry>>();
-            services.AddSingleton<IGenericRepository<DriverEntry>, GenericRepository<DriverEntry>>();
+            services.AddTransient<IGenericRepository<CarEntry>, GenericRepository<CarEntry>>();
+            services.AddTransient<IGenericRepository<DriverEntry>, GenericRepository<DriverEntry>>();
         }
     }
 }
