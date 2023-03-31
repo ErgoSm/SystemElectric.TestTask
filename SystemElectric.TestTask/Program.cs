@@ -31,7 +31,8 @@ namespace SystemElectric.TestTask
                         });
                     });
                     services.AddSingleton<TimeProvider, DefaultTimeProvider>();
-                    services.AddSingleton<StorageInteractor>();
+                    services.AddSingleton<StorageCommandManager>();
+                    services.AddSingleton<StorageQueryManager>();
                     services.AddSingleton<DataProvider>();
                     services.AddSingleton<DataReader>();
                     services.AddSingleton<ThreadsManager>();

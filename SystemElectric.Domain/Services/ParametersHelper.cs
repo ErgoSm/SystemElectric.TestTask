@@ -10,6 +10,6 @@ namespace SystemElectric.TestTask.Domain.Services
     {
         public const int FirstThreadDiscreteness = 2; 
         public const int SecondThreadDiscreteness = 3; 
-        public const int CombinationWaitingDelay = 200; 
+        public const int CombinationWaitingDelay = 150; 
     }
 }

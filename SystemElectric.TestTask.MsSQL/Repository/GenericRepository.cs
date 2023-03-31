@@ -6,7 +6,7 @@ using SystemElectric.TestTask.MsSQL.Context;
 
 namespace SystemElectric.TestTask.MsSQL.Repository
 {
-    public sealed class GenericRepository<T> : IGenericRepository<T> where T : class
+    public sealed class GenericRepository<T> : IDisposable, IGenericRepository<T> where T : class
     {
         private readonly MainContext _context;
 
@@ -28,6 +28,11 @@ namespace SystemElectric.TestTask.MsSQL.Repository
         public async Task<IEnumerable<T>> GetEntries(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken)
         {
             return await _context.Set<T>().Where(predicate).ToArrayAsync(cancellationToken);
+        }
+
+        public void Dispose()
+        {
+            _context.Dispose();
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Threading;
 using System.Windows;
 using SystemElectric.TestTask.Domain.Args;
 using SystemElectric.TestTask.Domain.Entities;
@@ -15,27 +15,18 @@ namespace SystemElectric.TestTask
     {
         private ObservableCollection<CarDriverPair> CarDrivers { get; set; } = new ObservableCollection<CarDriverPair>();
 
-        private readonly StorageInteractor _dbPresenter;
+        private readonly StorageQueryManager _queryManager;
+        private readonly ThreadsManager _threadsManager;
         private readonly ILogger<AdditionalWindow> _logger;
 
-        public AdditionalWindow(StorageInteractor dbPresenter, ILogger<AdditionalWindow> logger)
+        public AdditionalWindow(ThreadsManager threadsManager, StorageQueryManager queryManager, ILogger<AdditionalWindow> logger)
         {
             InitializeComponent();
-            _dbPresenter = dbPresenter;
+            _queryManager = queryManager;
+            _threadsManager = threadsManager;
             _logger = logger;
 
-            _dbPresenter.OnAddedEntry += (object? sender, TEntityArgs<CarDriverPair> e) =>
-            {
-                this.Dispatcher.Invoke(() =>
-                {
-                    CarDrivers.Insert(0, e.Entity);
-                });
-            };
-
-            var pairs = _dbPresenter.GetCarDriverPairs(CancellationToken.None).GetAwaiter().GetResult();
-
-            CarDrivers = new ObservableCollection<CarDriverPair>(pairs);
-            
+            CarDrivers = new ObservableCollection<CarDriverPair>();            
             lstTable.ItemsSource = CarDrivers;
         }
 
@@ -43,8 +34,35 @@ namespace SystemElectric.TestTask
         {
             e.Cancel = true;
             this.Visibility = Visibility.Hidden;
+        }
 
-            _logger.LogInformation("Additional window has closed");
+        private void UpdateTable(object? sender, TEntityArgs<IEnumerable<CarDriverPair>> e)
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+                foreach(var pair in e.Entity)
+                {
+                    CarDrivers.Insert(0, pair);
+                }
+            });
+        }
+
+        private void Window_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if(this.Visibility == Visibility.Visible)
+            {
+                _threadsManager.OnTimerTick += _queryManager.GetEntries;
+                _queryManager.OnAddedEntry += UpdateTable;
+
+                _logger.LogInformation("Additional window has opened");
+            }
+            else
+            {
+                _threadsManager.OnTimerTick -= _queryManager.GetEntries;
+                _queryManager.OnAddedEntry -= UpdateTable;
+
+                _logger.LogInformation("Additional window has closed");
+            }
         }
     }
 }

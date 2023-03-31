@@ -18,7 +18,8 @@ namespace SystemElectric.TestTask
         private ObservableCollection<CarDriverPair> CarDrivers { get; set; } = new ObservableCollection<CarDriverPair>();
 
         private readonly ThreadsManager _container;
-        private readonly StorageInteractor _dbPresenter;
+        private readonly StorageCommandManager _dbPresenter;
+        private readonly DataReader _reader;
 
         private readonly AdditionalWindow _additionalWindow;
         private readonly ILogger<MainWindow> _logger;
@@ -28,7 +29,7 @@ namespace SystemElectric.TestTask
             DataReader reader,
             ThreadsManager container,
             AdditionalWindow additionalWindow,
-            StorageInteractor dbPresenter,
+            StorageCommandManager dbPresenter,
             IHubContext<MainHub> hubContext,
             ILogger<MainWindow> logger)
         {
@@ -37,13 +38,12 @@ namespace SystemElectric.TestTask
             _additionalWindow = additionalWindow;
             _container = container;
             _logger = logger;
+            _reader = reader;
             _hubContext = hubContext;
             _dbPresenter = dbPresenter;
             lstTable.ItemsSource = CarDrivers;
 
             container.OnSimultaneousRead += Reader_OnSimultaneousRead;
-            reader.OnCarRead += Reader_OnCarRead;
-            reader.OnDriverRead += Reader_OnDriverRead;
         }
 
         private void Reader_OnSimultaneousRead(object? sender, ReadArgs e)
@@ -67,20 +67,19 @@ namespace SystemElectric.TestTask
 
         private void btnRun1_Click(object sender, RoutedEventArgs e)
         {
-            _container.Toggle(1);
+            _container.Toggle(1, () => _reader.OnCarRead += Reader_OnCarRead, () => _reader.OnCarRead -= Reader_OnCarRead);
             _logger.LogInformation("Start thread 1");
         }
 
         private void btnRun2_Click(object sender, RoutedEventArgs e)
         {
-            _container.Toggle(2);
+            _container.Toggle(2, () => _reader.OnDriverRead += Reader_OnDriverRead, () => _reader.OnDriverRead -= Reader_OnDriverRead);
             _logger.LogInformation("Start thread 2");
         }
 
         private void btnWin2_Click(object sender, RoutedEventArgs e)
         {
             _additionalWindow.Visibility = Visibility.Visible;
-            _logger.LogInformation("Additional window has opened");
         }
 
         private async void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

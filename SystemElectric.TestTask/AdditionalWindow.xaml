@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SystemElectric.TestTask"
         mc:Ignorable="d"
-        Title="AdditionalWindow" Height="450" Width="800" Closing="AdditionalWindow_Closing">
+        Title="AdditionalWindow" Height="450" Width="800" Closing="AdditionalWindow_Closing" IsVisibleChanged="Window_IsVisibleChanged">
     <Grid>
         <ListView Name="lstTable" Height="400">
             <ListView.View>
