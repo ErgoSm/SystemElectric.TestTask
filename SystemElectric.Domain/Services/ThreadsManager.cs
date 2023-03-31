@@ -84,7 +84,7 @@ namespace SystemElectric.TestTask.Domain.Services
             }
         }
 
-        public void Toggle(int number, Action activation, Action deactivation)
+        public void Toggle(int number, Action? activation, Action? deactivation)
         {
             string status;
 
@@ -94,12 +94,12 @@ namespace SystemElectric.TestTask.Domain.Services
 
                 if (firstThread.IsEnabled)
                 {
-                    activation();
+                    activation?.Invoke();
                     status = "enabled";
                 }
                 else
                 {
-                    deactivation();
+                    deactivation?.Invoke();
                     status = "enabled";
                 }
 
@@ -111,12 +111,12 @@ namespace SystemElectric.TestTask.Domain.Services
 
                 if (secondThread.IsEnabled)
                 {
-                    activation();
+                    activation?.Invoke();
                     status = "enabled";
                 }
                 else
                 {
-                    deactivation();
+                    deactivation?.Invoke();
                     status = "enabled";
                 }
 

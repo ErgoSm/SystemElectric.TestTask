@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Moq;
+using System.Reflection.Metadata.Ecma335;
 using SystemElectric.TestTask.Domain.Services;
 
 namespace SystemElectric.TestTask.Tests
@@ -24,8 +25,8 @@ namespace SystemElectric.TestTask.Tests
         [InlineData(6000)]
         public async void Test_number_of_generated_entities(int executionTimeInMs)
         {
-            _threadsManager.Toggle(1);
-            _threadsManager.Toggle(2);
+            _threadsManager.Toggle(1, null, null); 
+            _threadsManager.Toggle(2, null, null);
 
             int carsCounter = 0;
             int driversCounter = 0;
